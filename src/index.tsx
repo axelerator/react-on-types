@@ -169,35 +169,12 @@ abstract class Component<T,R> extends VTree {
 }
 
 interface NoProps {}
+interface NoState {}
 
-class C1 extends Component<CounterState, NoProps> {
-
-  defaultState() : CounterState {
-    return {
-      count: 0,
-      variant: 'normal'
-    }
-  }
-
-  increment() {
-    return {
-      count: this.state().count + 1
-    }
-  }
-
-  update(e: any) {
-    console.log(e.srcElement.value);
-    return {
-      count: 444
-    }
-  }
-
-  render() : VTree {
-    return <div>
-      <p>{this.state().count}</p>
-      <p onclick={this.x(this.increment)}>+++</p>
-      <input oninput={this.x(this.update)} value={this.state().count} />
-    </div>;
+abstract class StatelessComponent extends Component<NoState, NoProps> {
+  constructor() { super({}); }
+  defaultState() {
+    return {};
   }
 }
 
@@ -240,15 +217,6 @@ class Counter extends Component<CounterState, CounterInit> {
   } 
 }
 
-interface NoState {}
-
-abstract class StatelessComponent extends Component<NoState, NoProps> {
-  constructor() { super({}); }
-  defaultState() {
-    return {};
-  }
-}
-
 interface LayoutState {
   amount: number
 }
@@ -263,7 +231,6 @@ class Layout extends StatelessComponent {
   }
 }
 
-const c1 = new C1({});
 const counter = new Counter({ count: 1});
 const layout = new Layout();
 const n = layout.createDOM();
